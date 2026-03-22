@@ -4,9 +4,10 @@ COLOR_GREEN := \033[32m
 COLOR_RESET := \033[0m
 SERVICE ?= $(word 2,$(MAKECMDGOALS))
 
-SERVICES := app
+SERVICES := app db
 
-CONTAINER_app := acta-auth-development-app
+CONTAINER_app := acta-auth-app-development
+CONTAINER_db := acta-auth-db-development
 
 ifeq ($(SERVICE),)
 CONTAINER := $(CONTAINER_app)
@@ -16,9 +17,10 @@ else
 $(error Unknown service '$(SERVICE)'. Supported: $(SERVICES))
 endif
 
-.PHONY: up down shell env $(SERVICES)
+.PHONY: up down shell logs env $(SERVICES)
 
 up:
+	@docker network inspect acta-shared-network >/dev/null 2>&1 || docker network create acta-shared-network >/dev/null
 	docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE) up --build -d
 
 down:
@@ -47,5 +49,11 @@ env:
 shell:
 	docker exec -it $(CONTAINER) bash
 
+logs:
+	docker logs -f $(CONTAINER)
+
 app:
+	@:
+
+db:
 	@:
