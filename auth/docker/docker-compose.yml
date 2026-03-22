@@ -1,10 +1,17 @@
 services:
-  acta-auth-development-app:
-    container_name: acta-auth-development-app
+  acta-auth-app-development:
+    container_name: acta-auth-app-development
+    env_file:
+      - .env.development
     build:
       context: ..
       dockerfile: docker/Dockerfile
     restart: unless-stopped
+    networks:
+      - acta-shared-network
+      - acta-auth-network
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
 
   acta-auth-db-development:
     container_name: acta-auth-db-development
@@ -16,6 +23,15 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - acta-auth-postgres-data:/var/lib/postgresql/data
+    networks:
+      - acta-auth-network
 
 volumes:
   acta-auth-postgres-data:
+
+networks:
+  acta-shared-network:
+    external: true
+    name: acta-shared-network
+  acta-auth-network:
+    name: acta-auth-network
