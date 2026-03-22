@@ -1,0 +1,9 @@
+module github.com/EugeneNail/acta/auth
+
+go 1.26.1
+
+require (
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/lib/pq v1.12.0 // indirect
+	github.com/samborkent/uuidv7 v0.0.0-20231110121620-f2e19d87e48b // indirect
+)
