@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Ping responds with a generated request identifier.
 func (handler *Handler) Ping(writer http.ResponseWriter, request *http.Request) {
 	message := "This is request " + uuid.UUID(uuidv7.New()).String()
 

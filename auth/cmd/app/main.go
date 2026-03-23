@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// main starts the auth HTTP server.
 func main() {
 	applicationConfig, err := config.New()
 	if err != nil {

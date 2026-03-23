@@ -9,6 +9,6 @@ RUN go mod download
 COPY "cmd" "./cmd"
 COPY internal ./internal
 
-RUN go build -o /app/main ./cmd/main.go
+RUN go build -o /app/main ./cmd/app/main.go
 
 CMD ["./main"]

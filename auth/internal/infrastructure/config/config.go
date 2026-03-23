@@ -19,11 +19,14 @@ type App struct {
 
 type Postgres struct {
 	Database string
+	Host     string
 	User     string
 	Password string
 	Port     int
+	SslMode  string
 }
 
+// New reads application configuration from environment variables.
 func New() (Config, error) {
 	appName, err := read("APP_NAME")
 	if err != nil {
@@ -50,6 +53,11 @@ func New() (Config, error) {
 		return Config{}, fmt.Errorf("reading POSTGRES_USER: %w", err)
 	}
 
+	postgresHost, err := read("POSTGRES_HOST")
+	if err != nil {
+		return Config{}, fmt.Errorf("reading POSTGRES_HOST: %w", err)
+	}
+
 	postgresPassword, err := read("POSTGRES_PASSWORD")
 	if err != nil {
 		return Config{}, fmt.Errorf("reading POSTGRES_PASSWORD: %w", err)
@@ -65,6 +73,11 @@ func New() (Config, error) {
 		return Config{}, fmt.Errorf("converting POSTGRES_PORT to int: %w", err)
 	}
 
+	postgresSslMode, err := read("POSTGRES_SSLMODE")
+	if err != nil {
+		return Config{}, fmt.Errorf("reading POSTGRES_SSLMODE: %w", err)
+	}
+
 	return Config{
 		App: App{
 			Name: appName,
@@ -72,13 +85,16 @@ func New() (Config, error) {
 		},
 		Postgres: Postgres{
 			Database: postgresDatabase,
+			Host:     postgresHost,
 			User:     postgresUser,
 			Password: postgresPassword,
 			Port:     postgresPort,
+			SslMode:  postgresSslMode,
 		},
 	}, nil
 }
 
+// read reads a required environment variable by key.
 func read(key string) (string, error) {
 	value := os.Getenv(key)
 	if value == "" {
