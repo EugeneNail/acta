@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/EugeneNail/acta/auth/internal/application/create_user"
 	"github.com/EugeneNail/acta/auth/internal/application/login_user"
+	"github.com/EugeneNail/acta/auth/internal/application/refresh_access_token"
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/config"
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/repository/postgres"
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/token"
@@ -44,13 +45,15 @@ func main() {
 	createUserHandler := create_user.NewHandler(userRepository)
 	tokenProvider := token.NewProvider()
 	loginUserHandler := login_user.NewHandler(userRepository, tokenProvider)
+	refreshAccessTokenHandler := refresh_access_token.NewHandler(userRepository, tokenProvider)
 
 	server := http.NewServeMux()
-	httpHandler := transportHttp.NewHandler(createUserHandler, loginUserHandler)
+	httpHandler := transportHttp.NewHandler(createUserHandler, loginUserHandler, refreshAccessTokenHandler)
 
 	server.HandleFunc("GET  /api/v1/auth", httpHandler.Ping)
 	server.HandleFunc("POST /api/v1/auth/signup", middleware.WriteJsonResponse(httpHandler.Signup))
 	server.HandleFunc("POST /api/v1/auth/login", middleware.WriteJsonResponse(httpHandler.Login))
+	server.HandleFunc("POST /api/v1/auth/refresh", middleware.WriteJsonResponse(httpHandler.Refresh))
 
 	if err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", applicationConfig.App.Port), server); err != nil {
 		log.Fatal(fmt.Errorf("starting http server: %w", err))
