@@ -25,9 +25,7 @@ type SignupResponse struct {
 func (handler *Handler) Signup(request *http.Request) (int, any) {
 	var payload signupRequest
 
-	decoder := json.NewDecoder(request.Body)
-	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&payload); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
 		return http.StatusBadRequest, fmt.Errorf("decoding signup request: %w", err)
 	}
 
