@@ -1,0 +1,18 @@
+services:
+  acta-proxy-app-development:
+    container_name: acta-proxy-app-development
+    image: nginx:1.29-alpine
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "${PROXY_PORT}:80"
+    networks:
+      - acta-shared-network
+
+networks:
+  acta-shared-network:
+    external: true
+    name: acta-shared-network
