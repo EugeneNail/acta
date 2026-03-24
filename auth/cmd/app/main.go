@@ -1,9 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/EugeneNail/acta/auth/internal/application/create_user"
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/config"
-	http2 "github.com/EugeneNail/acta/auth/internal/transport/http"
+	"github.com/EugeneNail/acta/auth/internal/infrastructure/repository/postgres"
+	transportHttp "github.com/EugeneNail/acta/auth/internal/transport/http"
+	"github.com/EugeneNail/acta/auth/internal/transport/http/middleware"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 )
@@ -15,12 +20,34 @@ func main() {
 		log.Fatal(fmt.Errorf("creating a config: %w", err))
 	}
 
-	server := http.NewServeMux()
-	httpHandler := http2.NewHandler()
+	db, err := sql.Open(
+		"postgres",
+		fmt.Sprintf(
+			"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+			applicationConfig.Postgres.User,
+			applicationConfig.Postgres.Password,
+			applicationConfig.Postgres.Host,
+			applicationConfig.Postgres.Port,
+			applicationConfig.Postgres.Database,
+			applicationConfig.Postgres.SslMode,
+		),
+	)
+	if err != nil {
+		log.Fatal(fmt.Errorf("opening database connection: %w", err))
+	}
 
-	server.HandleFunc("GET  /", httpHandler.Ping)
+	defer db.Close()
+
+	userRepository := postgres.NewUserRepository(db)
+	createUserHandler := create_user.NewHandler(userRepository)
+
+	server := http.NewServeMux()
+	httpHandler := transportHttp.NewHandler(createUserHandler)
+
+	server.HandleFunc("GET  /api/v1/auth", httpHandler.Ping)
+	server.HandleFunc("POST /api/v1/auth/signup", middleware.WriteJsonResponse(httpHandler.Signup))
 
 	if err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", applicationConfig.App.Port), server); err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Errorf("starting http server: %w", err))
 	}
 }
