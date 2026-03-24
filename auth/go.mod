@@ -9,3 +9,5 @@ require (
 	github.com/samborkent/uuidv7 v0.0.0-20231110121620-f2e19d87e48b
 	golang.org/x/crypto v0.49.0
 )
+
+require github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
