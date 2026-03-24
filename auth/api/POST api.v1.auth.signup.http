@@ -1,0 +1,8 @@
+POST http://localhost:10000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "email": "user@example.coma",
+  "password": "Strong123",
+  "passwordConfirmation": "Strong123"
+}
