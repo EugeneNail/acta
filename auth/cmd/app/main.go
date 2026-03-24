@@ -50,7 +50,6 @@ func main() {
 	server := http.NewServeMux()
 	httpHandler := transportHttp.NewHandler(createUserHandler, loginUserHandler, refreshAccessTokenHandler)
 
-	server.HandleFunc("GET  /api/v1/auth", httpHandler.Ping)
 	server.HandleFunc("POST /api/v1/auth/signup", middleware.WriteJsonResponse(httpHandler.Signup))
 	server.HandleFunc("POST /api/v1/auth/login", middleware.WriteJsonResponse(httpHandler.Login))
 	server.HandleFunc("POST /api/v1/auth/refresh", middleware.WriteJsonResponse(httpHandler.Refresh))
