@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/EugeneNail/acta/auth/internal/application"
 	"github.com/EugeneNail/acta/auth/internal/domain"
 )
 
@@ -19,11 +20,11 @@ type Result struct {
 
 type Handler struct {
 	repository    domain.UserRepository
-	tokenProvider domain.TokenProvider
+	tokenProvider application.TokenProvider
 }
 
 // NewHandler constructs the refresh access token use-case handler.
-func NewHandler(repository domain.UserRepository, tokenProvider domain.TokenProvider) *Handler {
+func NewHandler(repository domain.UserRepository, tokenProvider application.TokenProvider) *Handler {
 	return &Handler{
 		repository:    repository,
 		tokenProvider: tokenProvider,
