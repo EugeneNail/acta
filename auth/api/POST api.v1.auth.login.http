@@ -1,0 +1,7 @@
+POST http://localhost:10000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "login.user@example.com",
+  "password": "Strong123!"
+}
