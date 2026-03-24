@@ -21,3 +21,4 @@
 go.work
 auth/docker/.env.development
 proxy/docker/.env.development
+.idea/dataSources.xml
