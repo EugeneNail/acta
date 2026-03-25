@@ -1,10 +1,14 @@
-package validation
+package rules
 
 import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"unicode"
 )
+
+// Rule validates a field within the full data payload.
+type Rule func(data map[string]any, field string) (string, error)
 
 // LettersPattern allows only Latin and Cyrillic letters.
 const LettersPattern = `^[\p{Latin}\p{Cyrillic}]+$`
@@ -21,8 +25,8 @@ const SlugWithSpacesPattern = `^[\p{Latin}\p{Cyrillic}\d. -]+$`
 // SentencePattern allows sentence-like text with letters, digits, punctuation, and spaces.
 const SentencePattern = `^[\p{L}\p{N}\p{P}\p{Zs}]+$`
 
-// Rule validates a field within the full data payload.
-type Rule func(data map[string]any, field string) (string, error)
+// EmailPattern allows a typical email address with a local part, @, and a domain part with a dot-separated suffix.
+const EmailPattern = `^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$`
 
 // Required validates that the field exists, is not nil, and differs from its type zero value.
 func Required() Rule {
@@ -38,7 +42,12 @@ func Required() Rule {
 
 // Min validates that the field value or size is at least the provided minimum.
 func Min(minimum int) Rule {
-	return withSkipIfNotPresent(func(value any, field string) (string, error) {
+	return func(data map[string]any, field string) (string, error) {
+		value, exists := data[field]
+		if !exists {
+			return "", nil
+		}
+
 		current, err := extractMeasurableValue(value)
 		if err != nil {
 			return "", fmt.Errorf("measuring minimum for field %q: %w", field, err)
@@ -49,12 +58,17 @@ func Min(minimum int) Rule {
 		}
 
 		return "", nil
-	})
+	}
 }
 
 // Max validates that the field value or size does not exceed the provided maximum.
 func Max(maximum int) Rule {
-	return withSkipIfNotPresent(func(value any, field string) (string, error) {
+	return func(data map[string]any, field string) (string, error) {
+		value, exists := data[field]
+		if !exists {
+			return "", nil
+		}
+
 		current, err := extractMeasurableValue(value)
 		if err != nil {
 			return "", fmt.Errorf("measuring maximum for field %q: %w", field, err)
@@ -65,12 +79,17 @@ func Max(maximum int) Rule {
 		}
 
 		return "", nil
-	})
+	}
 }
 
 // Gte validates that the field value or size is greater than or equal to the provided threshold.
 func Gte(threshold int) Rule {
-	return withSkipIfNotPresent(func(value any, field string) (string, error) {
+	return func(data map[string]any, field string) (string, error) {
+		value, exists := data[field]
+		if !exists {
+			return "", nil
+		}
+
 		current, err := extractMeasurableValue(value)
 		if err != nil {
 			return "", fmt.Errorf("measuring threshold for field %q: %w", field, err)
@@ -81,12 +100,17 @@ func Gte(threshold int) Rule {
 		}
 
 		return "", nil
-	})
+	}
 }
 
 // Lte validates that the field value or size is less than or equal to the provided threshold.
 func Lte(threshold int) Rule {
-	return withSkipIfNotPresent(func(value any, field string) (string, error) {
+	return func(data map[string]any, field string) (string, error) {
+		value, exists := data[field]
+		if !exists {
+			return "", nil
+		}
+
 		current, err := extractMeasurableValue(value)
 		if err != nil {
 			return "", fmt.Errorf("measuring threshold for field %q: %w", field, err)
@@ -97,16 +121,21 @@ func Lte(threshold int) Rule {
 		}
 
 		return "", nil
-	})
+	}
 }
 
 // Regex validates that the field string matches the provided regular expression mask.
 func Regex(mask string) Rule {
 	pattern, err := regexp.Compile(mask)
 
-	return withSkipIfNotPresent(func(value any, field string) (string, error) {
+	return func(data map[string]any, field string) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("compiling regex mask %q: %w", mask, err)
+		}
+
+		value, exists := data[field]
+		if !exists {
+			return "", nil
 		}
 
 		text, ok := value.(string)
@@ -119,22 +148,84 @@ func Regex(mask string) Rule {
 		}
 
 		return "", nil
-	})
+	}
 }
 
-// withSkipIfNotPresent executes the callback only when the field exists in the data payload.
-func withSkipIfNotPresent(rule func(value any, field string) (string, error)) Rule {
+// Same validates that the field value matches the value of another field.
+func Same(otherField string) Rule {
 	return func(data map[string]any, field string) (string, error) {
 		value, exists := data[field]
 		if !exists {
 			return "", nil
 		}
 
-		return rule(value, field)
+		otherValue, otherExists := data[otherField]
+		if !otherExists {
+			return "", fmt.Errorf("reading field %q for comparison with field %q: field does not exist", otherField, field)
+		}
+
+		if value != otherValue {
+			return fmt.Sprintf("must match %s", otherField), nil
+		}
+
+		return "", nil
 	}
 }
 
-// extractMeasurableValue converts supported scalar values to numbers and collection-like values to their length.
+// Password validates that the field contains at least one digit, one letter,
+// one lowercase letter, one uppercase letter, and one special symbol.
+func Password() Rule {
+	return func(data map[string]any, field string) (string, error) {
+		value, exists := data[field]
+		if !exists {
+			return "", nil
+		}
+
+		text, ok := value.(string)
+		if !ok {
+			return "", fmt.Errorf("reading password for field %q: type %T is not supported", field, value)
+		}
+
+		var hasDigit bool
+		var hasLetter bool
+		var hasLower bool
+		var hasUpper bool
+		var hasSpecial bool
+
+		for _, symbol := range text {
+			switch {
+			case unicode.IsDigit(symbol):
+				hasDigit = true
+			case unicode.IsLetter(symbol):
+				hasLetter = true
+				if unicode.IsLower(symbol) {
+					hasLower = true
+				}
+				if unicode.IsUpper(symbol) {
+					hasUpper = true
+				}
+			default:
+				hasSpecial = true
+			}
+		}
+
+		switch {
+		case !hasDigit:
+			return "must contain at least one digit", nil
+		case !hasLetter:
+			return "must contain at least one letter", nil
+		case !hasLower:
+			return "must contain at least one lowercase letter", nil
+		case !hasUpper:
+			return "must contain at least one uppercase letter", nil
+		case !hasSpecial:
+			return "must contain at least one special symbol", nil
+		default:
+			return "", nil
+		}
+	}
+}
+
 func extractMeasurableValue(value any) (float64, error) {
 	switch typedValue := value.(type) {
 	case int:
@@ -175,7 +266,6 @@ func extractMeasurableValue(value any) (float64, error) {
 	return 0, fmt.Errorf("type %T is not supported", value)
 }
 
-// isNil reports whether the value is nil or wraps a nil reference-like Go value.
 func isNil(value any) bool {
 	if value == nil {
 		return true
@@ -190,7 +280,6 @@ func isNil(value any) bool {
 	}
 }
 
-// isZeroValue reports whether the value is the zero value for its type.
 func isZeroValue(value any) bool {
 	if value == nil {
 		return true

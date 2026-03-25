@@ -1,34 +1,31 @@
 package validation
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/EugeneNail/acta/lib-common/pkg/validation/rules"
+)
 
 // Validator applies field rulesets to input data.
 type Validator struct {
 	data     map[string]any
-	rulesets map[string][]Rule
+	rulesets map[string][]rules.Rule
 }
 
 // NewValidator constructs a validator for the provided data and rulesets.
-func NewValidator(data map[string]any, rulesets map[string][]Rule) (*Validator, error) {
-	for field, rules := range rulesets {
-		if len(rules) == 0 {
-			return nil, fmt.Errorf("ruleset for field %q is empty", field)
-		}
-	}
-
+func NewValidator(data map[string]any, rulesets map[string][]rules.Rule) *Validator {
 	return &Validator{
 		data:     data,
 		rulesets: rulesets,
-	}, nil
+	}
 }
 
 // Validate executes rulesets and returns either validation violations or a rule execution error.
 func (validator *Validator) Validate() error {
 	validationError := NewError()
 
-	for field, rules := range validator.rulesets {
+	for field, rls := range validator.rulesets {
 	ruleLoop:
-		for i, rule := range rules {
+		for i, rule := range rls {
 			message, err := rule(validator.data, field)
 			if err != nil {
 				return fmt.Errorf("applying %dth rule to field %q: %w", i, field, err)
@@ -41,7 +38,7 @@ func (validator *Validator) Validate() error {
 		}
 	}
 
-	if len(validationError.violations) > 0 {
+	if len(validationError.Violations()) > 0 {
 		return validationError
 	}
 

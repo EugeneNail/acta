@@ -14,7 +14,7 @@ func NewError() Error {
 	}
 }
 
-// Error implements the Error interface
+// Error implements the error interface.
 func (error Error) Error() string {
 	return fmt.Sprintf("validation failed: %d violations", len(error.violations))
 }
