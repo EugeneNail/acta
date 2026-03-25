@@ -1,0 +1,37 @@
+services:
+  acta-journal-app-development:
+    container_name: acta-journal-app-development
+    env_file:
+      - .env.development
+    build:
+      context: ..
+      dockerfile: docker/app.Dockerfile
+    restart: unless-stopped
+    networks:
+      - acta-shared-network
+      - acta-journal-network
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+
+  acta-journal-db-development:
+    container_name: acta-journal-db-development
+    image: postgres:17
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    ports:
+      - "10011:${POSTGRES_PORT}"
+    volumes:
+      - acta-journal-postgres-data:/var/lib/postgresql/data
+    networks:
+      - acta-journal-network
+
+volumes:
+  acta-journal-postgres-data:
+
+networks:
+  acta-shared-network:
+    external: true
+    name: acta-shared-network
+  acta-journal-network:
+    name: acta-journal-network
