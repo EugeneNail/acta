@@ -20,5 +20,6 @@
 # Go workspace file
 go.work
 auth/docker/.env.development
+journal/docker/.env.development
 proxy/docker/.env.development
 .idea/dataSources.xml
