@@ -10,7 +10,7 @@ import (
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/repository/postgres"
 	"github.com/EugeneNail/acta/auth/internal/infrastructure/token"
 	transportHttp "github.com/EugeneNail/acta/auth/internal/transport/http"
-	"github.com/EugeneNail/acta/auth/internal/transport/http/middleware"
+	"github.com/EugeneNail/acta/lib-common/pkg/http/middleware"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
@@ -35,11 +35,10 @@ func main() {
 			applicationConfig.Postgres.SslMode,
 		),
 	)
+	defer db.Close()
 	if err != nil {
 		log.Fatal(fmt.Errorf("opening database connection: %w", err))
 	}
-
-	defer db.Close()
 
 	userRepository := postgres.NewUserRepository(db)
 	createUserHandler := create_user.NewHandler(userRepository)
