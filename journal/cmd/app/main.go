@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/config"
+	transportHttp "github.com/EugeneNail/acta/journal/internal/transport/http"
+	"github.com/EugeneNail/acta/journal/internal/transport/http/middleware"
+	libHttpMiddleware "github.com/EugeneNail/acta/lib-common/pkg/http/middleware"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
@@ -35,6 +38,9 @@ func main() {
 	defer db.Close()
 
 	server := http.NewServeMux()
+	httpHandler := transportHttp.NewHandler()
+
+	server.HandleFunc("GET /api/v1/journal/journals", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.GetJournals)))
 
 	if err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", applicationConfig.App.Port), server); err != nil {
 		log.Fatal(fmt.Errorf("starting http server: %w", err))
