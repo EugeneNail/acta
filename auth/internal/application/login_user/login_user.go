@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/EugeneNail/acta/auth/internal/application"
 	"github.com/EugeneNail/acta/auth/internal/domain"
-	"github.com/EugeneNail/acta/auth/internal/infrastructure/validation"
-	"github.com/EugeneNail/acta/auth/internal/infrastructure/validation/rules"
+	"github.com/EugeneNail/acta/lib-common/pkg/validation"
+	"github.com/EugeneNail/acta/lib-common/pkg/validation/rules"
 	"golang.org/x/crypto/bcrypt"
 )
 

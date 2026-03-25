@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/EugeneNail/acta/auth/internal/application/refresh_access_token"
-	"github.com/EugeneNail/acta/auth/internal/infrastructure/validation"
-	"github.com/EugeneNail/acta/auth/internal/infrastructure/validation/rules"
+	"github.com/EugeneNail/acta/lib-common/pkg/validation"
+	"github.com/EugeneNail/acta/lib-common/pkg/validation/rules"
 	"net/http"
 )
 
