@@ -1,5 +1,8 @@
 COMPOSE_FILE := docker/docker-compose.yml
 ENV_FILE := docker/.env.development
+MIGRATOR_DOCKERFILE := docker/migrator.Dockerfile
+MIGRATOR_IMAGE := acta-journal-migrator
+MIGRATOR_NETWORK := acta-journal-network
 COLOR_GREEN := \033[32m
 COLOR_RESET := \033[0m
 SERVICE ?= $(word 2,$(MAKECMDGOALS))
@@ -17,7 +20,7 @@ else
 $(error Unknown service '$(SERVICE)'. Supported: $(SERVICES))
 endif
 
-.PHONY: up down shell logs env $(SERVICES)
+.PHONY: up down migrate rollback shell logs env $(SERVICES)
 
 up:
 	@docker network inspect acta-shared-network >/dev/null 2>&1 || docker network create acta-shared-network >/dev/null
@@ -25,6 +28,14 @@ up:
 
 down:
 	docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE) down
+
+migrate:
+	docker build -f $(MIGRATOR_DOCKERFILE) -t $(MIGRATOR_IMAGE) .
+	docker run --rm --env-file $(ENV_FILE) --env MIGRATION_COMMAND=up --network $(MIGRATOR_NETWORK) $(MIGRATOR_IMAGE)
+
+rollback:
+	docker build -f $(MIGRATOR_DOCKERFILE) -t $(MIGRATOR_IMAGE) .
+	docker run --rm --env-file $(ENV_FILE) --env MIGRATION_COMMAND=down --network $(MIGRATOR_NETWORK) $(MIGRATOR_IMAGE)
 
 env:
 	@find . -type f -name '.env.*.example' | while read -r example; do \
