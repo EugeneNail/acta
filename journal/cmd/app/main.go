@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/EugeneNail/acta/journal/internal/application/create_habit"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/config"
+	"github.com/EugeneNail/acta/journal/internal/infrastructure/repository/postgres"
 	transportHttp "github.com/EugeneNail/acta/journal/internal/transport/http"
 	"github.com/EugeneNail/acta/journal/internal/transport/http/middleware"
 	libHttpMiddleware "github.com/EugeneNail/acta/lib-common/pkg/http/middleware"
@@ -37,10 +39,16 @@ func main() {
 
 	defer db.Close()
 
-	server := http.NewServeMux()
-	httpHandler := transportHttp.NewHandler()
+	habitRepository := postgres.NewHabitRepository(db)
 
-	server.HandleFunc("GET /api/v1/journal/journals", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.GetJournals)))
+	createHabitHandler := create_habit.NewHandler(habitRepository)
+
+	server := http.NewServeMux()
+	httpHandler := transportHttp.NewHandler(
+		createHabitHandler,
+	)
+
+	server.HandleFunc("POST /api/v1/journal/habits", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.CreateHabit)))
 
 	if err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", applicationConfig.App.Port), server); err != nil {
 		log.Fatal(fmt.Errorf("starting http server: %w", err))
