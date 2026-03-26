@@ -82,48 +82,6 @@ func Max(maximum int) Rule {
 	}
 }
 
-// Gte validates that the field value or size is greater than or equal to the provided threshold.
-func Gte(threshold int) Rule {
-	return func(data map[string]any, field string) (string, error) {
-		value, exists := data[field]
-		if !exists {
-			return "", nil
-		}
-
-		current, err := extractMeasurableValue(value)
-		if err != nil {
-			return "", fmt.Errorf("measuring threshold for field %q: %w", field, err)
-		}
-
-		if current < float64(threshold) {
-			return fmt.Sprintf("must be greater than or equal to %d", threshold), nil
-		}
-
-		return "", nil
-	}
-}
-
-// Lte validates that the field value or size is less than or equal to the provided threshold.
-func Lte(threshold int) Rule {
-	return func(data map[string]any, field string) (string, error) {
-		value, exists := data[field]
-		if !exists {
-			return "", nil
-		}
-
-		current, err := extractMeasurableValue(value)
-		if err != nil {
-			return "", fmt.Errorf("measuring threshold for field %q: %w", field, err)
-		}
-
-		if current > float64(threshold) {
-			return fmt.Sprintf("must be less than or equal to %d", threshold), nil
-		}
-
-		return "", nil
-	}
-}
-
 // Regex validates that the field string matches the provided regular expression mask.
 func Regex(mask string) Rule {
 	pattern, err := regexp.Compile(mask)
