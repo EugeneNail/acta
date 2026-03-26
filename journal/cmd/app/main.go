@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/EugeneNail/acta/journal/internal/application/create_habit"
+	"github.com/EugeneNail/acta/journal/internal/application/delete_habit"
 	"github.com/EugeneNail/acta/journal/internal/application/update_habit"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/config"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/repository/postgres"
@@ -43,15 +44,18 @@ func main() {
 	habitRepository := postgres.NewHabitRepository(db)
 
 	createHabitHandler := create_habit.NewHandler(habitRepository)
+	deleteHabitHandler := delete_habit.NewHandler(habitRepository)
 	updateHabitHandler := update_habit.NewHandler(habitRepository)
 
 	server := http.NewServeMux()
 	httpHandler := transportHttp.NewHandler(
 		createHabitHandler,
+		deleteHabitHandler,
 		updateHabitHandler,
 	)
 
 	server.HandleFunc("POST /api/v1/journal/habits", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.CreateHabit)))
+	server.HandleFunc("DELETE /api/v1/journal/habits/{uuid}", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.DeleteHabit)))
 	server.HandleFunc("PUT /api/v1/journal/habits/{uuid}", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.UpdateHabit)))
 
 	if err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", applicationConfig.App.Port), server); err != nil {
