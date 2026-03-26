@@ -44,11 +44,20 @@
 - Application-level validation checks business rules and domain constraints.
 - The same field may be validated more than once across layers if the purpose is different at each layer.
 
+## Errors
+- Error messages must be as specific as possible.
+- If an error can be tied to a concrete entity, include the entity identifier in the message.
+- Prefer messages such as `detaching habit '%uuid%' from entry '%uuid%'` over generic variants such as `detaching habit from entry`.
+
 ## Docker And Runtime
 - Each microservice is encapsulated in Docker.
 - If a service uses a database, it must also have its own database container and its own one-shot migrator image.
 - Use a shared Docker network for inter-service communication.
 - Use a dedicated local Docker network for communication inside a single service.
+
+## Migrations
+- One migration file may operate on only one table.
+- The number of operations inside that migration file is not limited.
 
 ## Proxy
 - All external entry to services goes through the `proxy` service.
