@@ -6,6 +6,7 @@ import (
 	"github.com/EugeneNail/acta/journal/internal/application/create_habit"
 	"github.com/EugeneNail/acta/journal/internal/application/delete_habit"
 	"github.com/EugeneNail/acta/journal/internal/application/get_habit"
+	"github.com/EugeneNail/acta/journal/internal/application/list_habits"
 	"github.com/EugeneNail/acta/journal/internal/application/update_habit"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/config"
 	"github.com/EugeneNail/acta/journal/internal/infrastructure/repository/postgres"
@@ -47,6 +48,7 @@ func main() {
 	createHabitHandler := create_habit.NewHandler(habitRepository)
 	deleteHabitHandler := delete_habit.NewHandler(habitRepository)
 	getHabitHandler := get_habit.NewHandler(habitRepository)
+	listHabitsHandler := list_habits.NewHandler(habitRepository)
 	updateHabitHandler := update_habit.NewHandler(habitRepository)
 
 	server := http.NewServeMux()
@@ -54,11 +56,13 @@ func main() {
 		createHabitHandler,
 		deleteHabitHandler,
 		getHabitHandler,
+		listHabitsHandler,
 		updateHabitHandler,
 	)
 
 	server.HandleFunc("POST /api/v1/journal/habits", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.CreateHabit)))
 	server.HandleFunc("DELETE /api/v1/journal/habits/{uuid}", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.DeleteHabit)))
+	server.HandleFunc("GET /api/v1/journal/habits", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.ListHabits)))
 	server.HandleFunc("GET /api/v1/journal/habits/{uuid}", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.GetHabit)))
 	server.HandleFunc("PUT /api/v1/journal/habits/{uuid}", middleware.Authenticate(libHttpMiddleware.WriteJsonResponse(httpHandler.UpdateHabit)))
 
