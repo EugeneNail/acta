@@ -8,8 +8,7 @@ RUN go mod download
 
 COPY cmd ./cmd
 COPY internal ./internal
-
-RUN mkdir -p /migrations
+COPY migrations /migrations
 RUN GOOS=linux go build -o /migrator ./cmd/migrator/main.go
 
 ENTRYPOINT ["/migrator"]
