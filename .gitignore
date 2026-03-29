@@ -24,5 +24,9 @@ journal/docker/.env.development
 proxy/docker/.env.development
 ui/docker/.env.development
 ui/node_modules
+ui/dist
+ui/*.tsbuildinfo
+ui/vite.config.js
+ui/vite.config.d.ts
 .idea/dataSources.xml
 .idea/sqldialects.xml
