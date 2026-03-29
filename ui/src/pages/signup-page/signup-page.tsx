@@ -1,52 +1,50 @@
 import type { FormEvent } from "react";
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { httpClient, saveAuthTokens } from "../../infrastructure/http-client/http-client";
 import "./signup-page.sass";
 
-type SignupResponse = {
-  uuid: string;
+type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
 };
 
 type ValidationErrors = Record<string, string>;
 
 export function SignupPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [createdUserUuid, setCreatedUserUuid] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
     setErrors({});
-    setCreatedUserUuid("");
 
     try {
-      const response = await fetch("/api/v1/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          passwordConfirmation,
-        }),
+      await httpClient.post("/api/v1/auth/signup", {
+        email,
+        password,
+        passwordConfirmation,
       });
 
-      const payload = (await response.json()) as SignupResponse | ValidationErrors;
+      const loginResponse = await httpClient.post<LoginResponse>("/api/v1/auth/login", {
+        email,
+        password,
+      });
 
-      if (!response.ok) {
-        setErrors(payload as ValidationErrors);
+      saveAuthTokens(loginResponse.data.accessToken, loginResponse.data.refreshToken);
+      navigate("/");
+    } catch (error) {
+      if (axios.isAxiosError<ValidationErrors>(error) && error.response?.data !== undefined) {
+        setErrors(error.response.data);
         return;
       }
 
-      setCreatedUserUuid((payload as SignupResponse).uuid);
-      setPassword("");
-      setPasswordConfirmation("");
-    } catch (_error) {
       setErrors({ request: "Request failed. Try again." });
     } finally {
       setIsSubmitting(false);
@@ -109,13 +107,6 @@ export function SignupPage() {
               </li>
             ))}
           </ul>
-        )}
-
-        {createdUserUuid !== "" && (
-          <div className="signup-page__success">
-            <span className="signup-page__success-label">User created</span>
-            <strong className="signup-page__success-value">{createdUserUuid}</strong>
-          </div>
         )}
 
         <Link className="signup-page__link" to="/login">

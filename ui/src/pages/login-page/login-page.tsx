@@ -1,6 +1,8 @@
 import type { FormEvent } from "react";
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { httpClient, saveAuthTokens } from "../../infrastructure/http-client/http-client";
 import "./login-page.sass";
 
 type LoginResponse = {
@@ -11,42 +13,31 @@ type LoginResponse = {
 type ValidationErrors = Record<string, string>;
 
 export function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("login.user@example.com");
   const [password, setPassword] = useState("Strong123!");
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [tokens, setTokens] = useState<LoginResponse | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
     setErrors({});
-    setTokens(null);
 
     try {
-      const response = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const response = await httpClient.post<LoginResponse>("/api/v1/auth/login", {
+        email,
+        password,
       });
 
-      const payload = (await response.json()) as LoginResponse | ValidationErrors;
-
-      if (!response.ok) {
-        setErrors(payload as ValidationErrors);
+      saveAuthTokens(response.data.accessToken, response.data.refreshToken);
+      navigate("/");
+    } catch (error) {
+      if (axios.isAxiosError<ValidationErrors>(error) && error.response?.data !== undefined) {
+        setErrors(error.response.data);
         return;
       }
 
-      const nextTokens = payload as LoginResponse;
-      localStorage.setItem("accessToken", nextTokens.accessToken);
-      localStorage.setItem("refreshToken", nextTokens.refreshToken);
-      setTokens(nextTokens);
-    } catch (_error) {
       setErrors({ request: "Request failed. Try again." });
     } finally {
       setIsSubmitting(false);
@@ -97,19 +88,6 @@ export function LoginPage() {
               </li>
             ))}
           </ul>
-        )}
-
-        {tokens !== null && (
-          <div className="login-page__tokens">
-            <div className="login-page__token">
-              <span className="login-page__token-label">Access token</span>
-              <code className="login-page__token-value">{tokens.accessToken}</code>
-            </div>
-            <div className="login-page__token">
-              <span className="login-page__token-label">Refresh token</span>
-              <code className="login-page__token-value">{tokens.refreshToken}</code>
-            </div>
-          </div>
         )}
 
         <Link className="login-page__link" to="/signup">
