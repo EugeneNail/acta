@@ -37,6 +37,9 @@
 - HTTP request example files must be named after the route pattern.
 - Path parameters in HTTP request example file names must keep curly braces, for example `GET api.v1.journal.habits.{uuid}.http`.
 
+## Frontend Styles
+- CSS class names must follow BEM naming.
+
 ## Validation
 - Shared validation must live in `lib-common`, not be copied into services.
 - Validation rules must live in a `rules` subpackage.
