@@ -1,0 +1,47 @@
+:root
+  color-scheme: light
+  --paper: #f8f2e8
+  --paper-strong: #efe2cf
+  --ink: #1d3026
+  --muted: #546a5c
+  --sage: #b4d5b0
+  --sage-strong: #7bb174
+  --orange: #ef946c
+  --sun: #f6c85f
+  --panel: rgba(255, 255, 255, 0.74)
+  --panel-border: rgba(29, 48, 38, 0.1)
+  --shadow: 0 24px 60px rgba(56, 76, 64, 0.12)
+  font-family: "Avenir Next", "Trebuchet MS", sans-serif
+  line-height: 1.5
+  font-weight: 400
+  color: var(--ink)
+  background: radial-gradient(circle at top left, rgba(246, 200, 95, 0.42), transparent 28%), radial-gradient(circle at top right, rgba(123, 177, 116, 0.34), transparent 30%), linear-gradient(180deg, #fbf7f0 0%, var(--paper) 100%)
+
+*
+  box-sizing: border-box
+
+body
+  margin: 0
+  min-width: 320px
+  min-height: 100vh
+
+a
+  color: inherit
+  text-decoration: none
+
+#root
+  min-height: 100vh
+
+code
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace
+
+@media (max-width: 900px)
+  .topbar
+    align-items: flex-start
+    flex-direction: column
+
+  .panelGrid
+    grid-template-columns: 1fr
+
+  .hero
+    padding: 28px

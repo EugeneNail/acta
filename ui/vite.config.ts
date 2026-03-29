@@ -6,6 +6,6 @@ export default defineConfig({
     server: {
         allowedHosts: true,
         host: "0.0.0.0",
-        port: Number(process.env.APP_PORT ?? 3000),
+        port: 3000,
     },
 });
