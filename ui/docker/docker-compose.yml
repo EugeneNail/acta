@@ -7,11 +7,17 @@ services:
       context: ..
       dockerfile: docker/app.Dockerfile
     restart: unless-stopped
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "100"
     networks:
       - acta-shared-network
       - acta-ui-network
     ports:
       - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - ..:/app
+      - acta-ui-node-modules:/app/node_modules
 
 networks:
   acta-shared-network:
@@ -19,3 +25,6 @@ networks:
     name: acta-shared-network
   acta-ui-network:
     name: acta-ui-network
+
+volumes:
+  acta-ui-node-modules:
