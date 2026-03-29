@@ -1,0 +1,21 @@
+services:
+  acta-ui-app-development:
+    container_name: acta-ui-app-development
+    env_file:
+      - .env.development
+    build:
+      context: ..
+      dockerfile: docker/app.Dockerfile
+    restart: unless-stopped
+    networks:
+      - acta-shared-network
+      - acta-ui-network
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+
+networks:
+  acta-shared-network:
+    external: true
+    name: acta-shared-network
+  acta-ui-network:
+    name: acta-ui-network
