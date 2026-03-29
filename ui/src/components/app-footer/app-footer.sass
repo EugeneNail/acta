@@ -1,0 +1,30 @@
+.app-footer
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: 18px
+  margin-top: 24px
+  padding: 24px
+  border: 1px solid var(--panel-border)
+  border-radius: 28px
+  background: rgba(255, 255, 255, 0.6)
+  box-shadow: var(--shadow)
+
+.app-footer__column
+  display: grid
+  gap: 8px
+
+.app-footer__label
+  color: var(--muted)
+  font-size: 0.82rem
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+.app-footer__placeholder
+  color: var(--ink)
+  font-size: 1rem
+
+@media (max-width: 900px)
+  .app-footer
+    grid-template-columns: 1fr
+    padding-bottom: 112px
