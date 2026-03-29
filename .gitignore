@@ -22,4 +22,7 @@ go.work
 auth/docker/.env.development
 journal/docker/.env.development
 proxy/docker/.env.development
+ui/docker/.env.development
+ui/node_modules
 .idea/dataSources.xml
+.idea/sqldialects.xml
