@@ -1,0 +1,98 @@
+.signup-page
+  display: grid
+  place-items: center
+  min-height: 100vh
+  padding: 24px
+
+.signup-page__card
+  display: grid
+  gap: 18px
+  width: min(100%, 420px)
+  padding: 28px
+  border: 1px solid var(--panel-border)
+  border-radius: 28px
+  background: rgba(255, 255, 255, 0.88)
+  box-shadow: var(--shadow)
+
+.signup-page__title
+  margin: 0
+  font-size: 2rem
+  line-height: 1
+
+.signup-page__form
+  display: grid
+  gap: 14px
+
+.signup-page__field
+  display: grid
+  gap: 8px
+
+.signup-page__label
+  font-weight: 700
+
+.signup-page__input
+  width: 100%
+  padding: 14px 16px
+  border: 1px solid rgba(29, 48, 38, 0.12)
+  border-radius: 18px
+  background: rgba(255, 255, 255, 0.92)
+  color: var(--ink)
+
+  &:focus
+    outline: 2px solid rgba(123, 177, 116, 0.3)
+    outline-offset: 2px
+
+.signup-page__submit
+  padding: 14px 18px
+  border: 0
+  border-radius: 18px
+  background: var(--ink)
+  color: #fff7ef
+  font-weight: 700
+  cursor: pointer
+
+  &:disabled
+    opacity: 0.7
+    cursor: progress
+
+.signup-page__errors
+  display: grid
+  gap: 10px
+  margin: 0
+  padding: 0
+  list-style: none
+
+.signup-page__error
+  display: flex
+  justify-content: space-between
+  gap: 14px
+  padding: 12px 14px
+  border-radius: 16px
+  background: rgba(239, 148, 108, 0.14)
+  color: #7d3b20
+
+.signup-page__error-field
+  font-weight: 700
+  text-transform: capitalize
+
+.signup-page__success
+  display: grid
+  gap: 8px
+  padding: 14px 16px
+  border-radius: 18px
+  background: rgba(180, 213, 176, 0.26)
+
+.signup-page__success-label
+  color: var(--muted)
+  font-size: 0.78rem
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+.signup-page__success-value
+  word-break: break-word
+
+.signup-page__link
+  color: var(--ink)
+  font-weight: 700
+  text-align: center

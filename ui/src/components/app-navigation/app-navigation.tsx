@@ -12,6 +12,8 @@ const items = [
   { to: "/journal", label: "Journal", icon: "JR" },
   { to: "/habits", label: "Habits", icon: "HB" },
   { to: "/gallery", label: "Photos", icon: "PH" },
+  { to: "/signup", label: "Signup", icon: "SU" },
+  { to: "/login", label: "Login", icon: "LI" },
   { to: "/account", label: "Account", icon: "AC" },
 ];
 

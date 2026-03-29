@@ -1,0 +1,119 @@
+.login-page
+  display: grid
+  place-items: center
+  min-height: 100vh
+  padding: 24px
+
+.login-page__card
+  display: grid
+  gap: 18px
+  width: min(100%, 420px)
+  padding: 28px
+  border: 1px solid var(--panel-border)
+  border-radius: 28px
+  background: rgba(255, 255, 255, 0.88)
+  box-shadow: var(--shadow)
+
+.login-page__title
+  margin: 0
+  font-size: 2rem
+  line-height: 1
+
+.login-page__form
+  display: grid
+  gap: 14px
+
+.login-page__field
+  display: grid
+  gap: 8px
+
+.login-page__label
+  font-weight: 700
+
+.login-page__input
+  width: 100%
+  padding: 14px 16px
+  border: 1px solid rgba(29, 48, 38, 0.12)
+  border-radius: 18px
+  background: rgba(255, 255, 255, 0.92)
+  color: var(--ink)
+
+  &:focus
+    outline: 2px solid rgba(246, 200, 95, 0.28)
+    outline-offset: 2px
+
+.login-page__submit
+  padding: 14px 18px
+  border: 0
+  border-radius: 18px
+  background: var(--ink)
+  color: #fff7ef
+  font-weight: 700
+  cursor: pointer
+
+  &:disabled
+    opacity: 0.7
+    cursor: progress
+
+.login-page__errors
+  display: grid
+  gap: 10px
+  margin: 0
+  padding: 0
+  list-style: none
+
+.login-page__error
+  display: flex
+  justify-content: space-between
+  gap: 14px
+  padding: 12px 14px
+  border-radius: 16px
+  background: rgba(239, 148, 108, 0.14)
+  color: #7d3b20
+
+.login-page__error-field
+  font-weight: 700
+  text-transform: capitalize
+
+.login-page__tokens
+  display: grid
+  gap: 12px
+
+.login-page__token
+  display: grid
+  gap: 8px
+  padding: 14px 16px
+  border-radius: 18px
+  background: rgba(180, 213, 176, 0.22)
+
+.login-page__token-label
+  color: var(--muted)
+  font-size: 0.78rem
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+.login-page__token-value
+  word-break: break-all
+  white-space: pre-wrap
+
+.login-page__facts
+  display: grid
+  gap: 12px
+
+.login-page__fact
+  display: grid
+  gap: 6px
+  padding: 14px 16px
+  border-radius: 18px
+  background: rgba(255, 255, 255, 0.62)
+
+.login-page__fact-label
+  color: var(--muted)
+  font-size: 0.78rem
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+.login-page__fact-value
+  color: var(--ink)

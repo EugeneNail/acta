@@ -11,6 +11,7 @@ type Props = {
   title: string;
   description: string;
   children: ReactNode;
+  withNavigation?: boolean;
 };
 
 function resolveViewMode(): ViewMode {
@@ -26,6 +27,7 @@ export function AdaptiveLayout({
   title,
   description,
   children,
+  withNavigation = true,
 }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>(resolveViewMode);
 
@@ -40,7 +42,7 @@ export function AdaptiveLayout({
 
   return (
     <div className={`adaptive-layout adaptive-layout--${viewMode}`}>
-      <AppNavigation viewMode={viewMode} />
+      {withNavigation && <AppNavigation viewMode={viewMode} />}
       <div className="adaptive-layout__body">
         <main className="adaptive-layout__content">
           <section className="adaptive-layout__hero">
