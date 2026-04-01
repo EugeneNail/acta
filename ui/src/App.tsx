@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AccountPage } from "./pages/account-page/account-page";
+import { CreateHabitPage } from "./pages/create-habit-page/create-habit-page";
 import { DashboardPage } from "./pages/dashboard-page/dashboard-page";
 import { GalleryPage } from "./pages/gallery-page/gallery-page";
 import { HabitsPage } from "./pages/habits-page/habits-page";
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/journal" element={<JournalPage />} />
         <Route path="/habits" element={<HabitsPage />} />
+        <Route path="/habits/create" element={<CreateHabitPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
