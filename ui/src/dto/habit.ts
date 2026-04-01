@@ -9,4 +9,9 @@ export type CreateHabitDto = {
   name: string;
 };
 
+export type UpdateHabitDto = {
+  icon: number;
+  name: string;
+};
+
 export type ValidationErrorsDto = Record<string, string>;

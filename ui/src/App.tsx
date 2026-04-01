@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AccountPage } from "./pages/account-page/account-page";
 import { CreateHabitPage } from "./pages/create-habit-page/create-habit-page";
 import { DashboardPage } from "./pages/dashboard-page/dashboard-page";
+import { EditHabitPage } from "./pages/edit-habit-page/edit-habit-page";
 import { GalleryPage } from "./pages/gallery-page/gallery-page";
 import { HabitsPage } from "./pages/habits-page/habits-page";
 import { JournalPage } from "./pages/journal-page/journal-page";
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/journal" element={<JournalPage />} />
         <Route path="/habits" element={<HabitsPage />} />
         <Route path="/habits/create" element={<CreateHabitPage />} />
+        <Route path="/habits/:uuid" element={<EditHabitPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
