@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {IconSelector} from "../../components/icon-selector/icon-selector";
 import { AdaptiveLayout } from "../../layouts/adaptive-layout/adaptive-layout";
 import type {
@@ -12,6 +13,7 @@ import { httpClient } from "../../infrastructure/http-client/http-client";
 import "./create-habit-page.sass";
 
 export function CreateHabitPage() {
+  const navigate = useNavigate();
   const [icon, setIcon] = useState(100);
   const [name, setName] = useState("");
   const [fieldErrors, setFieldErrors] = useState<ValidationErrorsDto>({});
@@ -35,6 +37,7 @@ export function CreateHabitPage() {
       const response = await httpClient.post<HabitDto>("/api/v1/journal/habits", payload);
       setCreatedHabit(response.data);
       setName("");
+      navigate("/habits");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data !== undefined) {
         if (typeof error.response.data === "object" && error.response.data !== null) {
