@@ -4,6 +4,7 @@
 - Use conventional commits in the format `operation (service/scope): English message`.
 - `service/scope` is mandatory. The slash is part of the format.
 - Split changes into semantic groups before committing.
+- Split changes from different microservices into separate commits, even when they implement the same feature.
 - If a change includes shared infrastructure and multiple use-cases, commit shared infrastructure first, then commit each use-case separately.
 - Semantic grouping may split changes within a single file, not only by file.
 
