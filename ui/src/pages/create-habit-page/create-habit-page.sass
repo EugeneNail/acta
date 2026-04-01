@@ -9,15 +9,15 @@
   align-content: start
   padding: 24px
   border: 1px solid var(--panel-border)
-  border-radius: 28px
-  background: rgba(255, 255, 255, 0.78)
+  border-radius: 16px
+  background: var(--panel)
   box-shadow: var(--shadow)
 
 .create-habit-page__card--form
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(123, 177, 116, 0.12))
+  background: var(--panel)
 
 .create-habit-page__card--result
-  background: linear-gradient(180deg, rgba(246, 200, 95, 0.24), rgba(255, 255, 255, 0.82))
+  background: var(--panel)
 
 .create-habit-page__eyebrow
   color: var(--muted)
@@ -48,22 +48,22 @@
 
 .create-habit-page__input
   width: 100%
-  padding: 14px 16px
-  border: 1px solid rgba(29, 48, 38, 0.12)
-  border-radius: 18px
-  background: rgba(255, 255, 255, 0.92)
+  padding: 12px 14px
+  border: 1px solid var(--panel-border)
+  border-radius: 10px
+  background: #fff
   color: var(--ink)
 
   &:focus
-    outline: 2px solid rgba(123, 177, 116, 0.3)
+    outline: 2px solid rgba(47, 111, 84, 0.18)
     outline-offset: 2px
 
 .create-habit-page__submit
-  padding: 14px 18px
+  padding: 12px 16px
   border: 0
-  border-radius: 18px
+  border-radius: 10px
   background: var(--ink)
-  color: #fff7ef
+  color: #fff
   font-weight: 700
   cursor: pointer
 
@@ -83,9 +83,9 @@
   justify-content: space-between
   gap: 14px
   padding: 12px 14px
-  border-radius: 16px
-  background: rgba(239, 148, 108, 0.14)
-  color: #7d3b20
+  border-radius: 10px
+  background: var(--danger-soft)
+  color: var(--danger-ink)
 
 .create-habit-page__error-field
   font-weight: 700
@@ -93,9 +93,9 @@
 
 .create-habit-page__request-error
   padding: 14px 16px
-  border-radius: 18px
-  background: rgba(239, 148, 108, 0.14)
-  color: #7d3b20
+  border-radius: 10px
+  background: var(--danger-soft)
+  color: var(--danger-ink)
   font-weight: 700
 
 .create-habit-page__summary
@@ -106,8 +106,8 @@
   display: grid
   gap: 6px
   padding: 14px 16px
-  border-radius: 18px
-  background: rgba(255, 255, 255, 0.7)
+  border-radius: 10px
+  background: var(--paper)
 
 .create-habit-page__summary-label
   color: var(--muted)

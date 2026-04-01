@@ -10,9 +10,9 @@
   gap: 12px
 
 .icon-selector__group
-  border: 1px solid rgba(29, 48, 38, 0.12)
-  border-radius: 20px
-  background: rgba(255, 255, 255, 0.82)
+  border: 1px solid var(--panel-border)
+  border-radius: 10px
+  background: #fff
   overflow: hidden
 
 .icon-selector__summary
@@ -35,7 +35,7 @@
   min-width: 32px
   padding: 4px 10px
   border-radius: 999px
-  background: rgba(29, 48, 38, 0.08)
+  background: var(--paper)
   color: var(--muted)
   font-size: 0.78rem
   text-align: center
@@ -51,24 +51,23 @@
   place-items: center
   min-height: 72px
   padding: 8px
-  border: 1px solid rgba(29, 48, 38, 0.1)
-  border-radius: 18px
-  background: rgba(255, 255, 255, 0.94)
+  border: 1px solid var(--panel-border)
+  border-radius: 10px
+  background: #fff
   cursor: pointer
-  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease
+  transition: border-color 0.16s ease, background 0.16s ease
 
   &:hover
-    transform: translateY(-1px)
-    border-color: rgba(123, 177, 116, 0.45)
+    border-color: var(--accent)
 
   &:focus-visible
-    outline: 2px solid rgba(123, 177, 116, 0.38)
+    outline: 2px solid rgba(47, 111, 84, 0.18)
     outline-offset: 2px
 
 .icon-selector__item--selected
-  border-color: rgba(123, 177, 116, 0.9)
-  background: rgba(123, 177, 116, 0.14)
-  box-shadow: inset 0 0 0 1px rgba(123, 177, 116, 0.32)
+  border-color: var(--accent)
+  background: var(--accent-soft)
+  box-shadow: none
 
 .icon-selector__image
   display: block

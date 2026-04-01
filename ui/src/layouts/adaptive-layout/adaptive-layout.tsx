@@ -45,11 +45,12 @@ export function AdaptiveLayout({
       {withNavigation && <AppNavigation viewMode={viewMode} />}
       <div className="adaptive-layout__body">
         <main className="adaptive-layout__content">
-          <section className="adaptive-layout__hero">
+          <header className="adaptive-layout__header">
             <span className="adaptive-layout__eyebrow">{eyebrow}</span>
             <h1 className="adaptive-layout__title">{title}</h1>
             <p className="adaptive-layout__description">{description}</p>
-          </section>
+            <p className="adaptive-layout__note">Simplified demo design.</p>
+          </header>
 
           {children}
         </main>

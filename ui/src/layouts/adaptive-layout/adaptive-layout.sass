@@ -3,7 +3,7 @@
 
 .adaptive-layout--desktop
   display: grid
-  grid-template-columns: auto minmax(0, 1fr)
+  grid-template-columns: 248px minmax(0, 1fr)
 
 .adaptive-layout--mobile
   display: block
@@ -13,60 +13,42 @@
   display: grid
   align-content: start
   min-width: 0
-  padding: 28px
+  padding: 24px
 
 .adaptive-layout__content
   display: grid
-  gap: 24px
+  gap: 20px
+  max-width: 1120px
 
-.adaptive-layout__hero
-  position: relative
-  overflow: hidden
-  padding: 34px
-  border: 1px solid var(--panel-border)
-  border-radius: 32px
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 232, 0.78)), linear-gradient(135deg, rgba(180, 213, 176, 0.24), rgba(239, 148, 108, 0.18))
-  box-shadow: var(--shadow)
-
-  &::after
-    content: ""
-    position: absolute
-    top: -40px
-    right: -40px
-    width: 180px
-    height: 180px
-    border-radius: 26px
-    transform: rotate(14deg)
-    background: linear-gradient(180deg, rgba(123, 177, 116, 0.18), rgba(246, 200, 95, 0.28))
+.adaptive-layout__header
+  display: grid
+  gap: 10px
+  padding: 0 0 6px
 
 .adaptive-layout__eyebrow
-  display: inline-block
-  margin-bottom: 14px
-  padding: 6px 12px
-  border-radius: 999px
-  background: rgba(255, 255, 255, 0.76)
   color: var(--muted)
-  font-size: 0.8rem
+  font-size: 0.78rem
   font-weight: 700
   letter-spacing: 0.08em
   text-transform: uppercase
 
 .adaptive-layout__title
-  max-width: 12ch
   margin: 0
-  font-size: clamp(2.4rem, 6vw, 5rem)
-  line-height: 0.95
-  letter-spacing: -0.05em
+  font-size: clamp(1.8rem, 4vw, 2.7rem)
+  line-height: 1.05
+  letter-spacing: -0.03em
 
 .adaptive-layout__description
-  max-width: 58ch
-  margin: 18px 0 0
+  max-width: 64ch
+  margin: 0
   color: var(--muted)
-  font-size: 1.05rem
+  font-size: 1rem
+
+.adaptive-layout__note
+  margin: 0
+  color: var(--muted)
+  font-size: 0.88rem
 
 @media (max-width: 900px)
   .adaptive-layout__body
-    padding: 20px
-
-  .adaptive-layout__hero
-    padding: 26px
+    padding: 16px
