@@ -33,7 +33,7 @@ func NewHandler(repository domain.HabitRepository) *Handler {
 // Handle updates an existing habit.
 func (handler *Handler) Handle(ctx context.Context, command Command) (domain.Habit, error) {
 	validator := validation.NewValidator(map[string]any{
-		"icon": command.Icon,
+		"icon": int(command.Icon),
 		"name": command.Name,
 	}, map[string][]rules.Rule{
 		"icon": {rules.Required(), rules.Min(1), rules.Max(1000)},
